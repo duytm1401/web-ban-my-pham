@@ -1,132 +1,114 @@
 import React from 'react';
-import { ArrowLeft, ArrowRight, Truck, Headphones, ShieldCheck } from 'lucide-react';
+import { Truck, Headphones, ShieldCheck } from 'lucide-react';
 
 import mainImg from '../assets/FeaturedArrivals/featured-main.jpg';
 import topImg from '../assets/FeaturedArrivals/featured-top.jpg';
 import bottomImg from '../assets/FeaturedArrivals/featured-bottom.jpg';
 
+function ComingSoonBadge() {
+  return (
+    <div style={{
+      position: 'absolute', top: 16, left: 16, zIndex: 30,
+      display: 'flex', alignItems: 'center', gap: 6,
+      padding: '5px 12px', background: 'rgba(6,6,8,0.8)', borderRadius: 50,
+    }}>
+      <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#DB4444', animation: 'pulse 1.4s ease infinite' }} />
+      <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2, color: '#DB4444', textTransform: 'uppercase', fontFamily: 'sans-serif' }}>
+        Sắp Ra Mắt
+      </span>
+    </div>
+  );
+}
 
 export default function FeaturedArrivals() {
+  const card = { position: 'relative', borderRadius: 12, overflow: 'hidden', background: '#111' };
+
   return (
-    <section className="mt-10 lg:mt-20 mb-10 lg:mb-20">
-      
-      {/* 1. Tiêu đề nhỏ */}
-      <div className="flex items-center gap-4 mb-4 lg:mb-6">
-        <div className="w-5 h-8 lg:h-10 bg-[#DB4444] rounded-sm"></div>
-        <span className="text-[#DB4444] font-bold text-sm lg:text-base">Nổi bật</span>
+    <section style={{ marginTop: 80, marginBottom: 80, fontFamily: '"Cormorant Garamond", Georgia, serif' }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,700;1,600&display=swap');
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+        .fa-card { animation: fadeUp .6s ease both; }
+        .fa-card:nth-child(1){ animation-delay:.05s }
+        .fa-card:nth-child(2){ animation-delay:.18s }
+        .fa-card img { transition: transform .9s cubic-bezier(.25,.46,.45,.94); }
+        .fa-card:hover img { transform: scale(1.06); }
+      `}</style>
+
+      {/* Section label */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
+        <div style={{ width: 5, height: 32, background: '#DB4444', borderRadius: 2 }} />
+        <span style={{ fontSize: 13, fontWeight: 700, color: '#DB4444', fontFamily: 'sans-serif' }}>Sắp Ra Mắt</span>
       </div>
 
-      {/* 2. Tiêu đề lớn + Mũi tên */}
-      <div className="flex items-end justify-between mb-8 lg:mb-12">
-        <h2 className="text-2xl lg:text-4xl font-bold tracking-wider text-black">
-          Sản Phẩm Mới Ra Mắt
-        </h2>
-        <div className="flex gap-2">
-          <button className="w-9 h-9 lg:w-11 lg:h-11 rounded-full bg-gray-100 flex items-center justify-center hover:bg-[#DB4444] hover:text-white transition-colors">
-            <ArrowLeft size={20} />
-          </button>
-          <button className="w-9 h-9 lg:w-11 lg:h-11 rounded-full bg-gray-100 flex items-center justify-center hover:bg-[#DB4444] hover:text-white transition-colors">
-            <ArrowRight size={20} />
-          </button>
-        </div>
-      </div>
+      {/* Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: 'auto auto', gap: 12, marginBottom: 52 }}>
 
-      {/* 3. Bố cục lưới 2 cột - CHỮ NỔI TRÊN ẢNH */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8 mb-20">
-        
-        {/* Khối Trái  */}
-        <div className="relative bg-[#122A25] border border-gray-200 rounded-sm overflow-hidden min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] flex items-end group z-40">
-          
-          <img 
-            src={mainImg || "https://placehold.co/600x800/122A25/dddddd?text=Bo+Suu+Tap+Mua+Xuan"} 
-            alt="New Collection Main" 
-            className="absolute inset-0 w-full h-full object-cover rounded-sm mix-blend-normal group-hover:scale-105 transition-transform duration-700"
-          />
-          
-          {/* Lớp Overlay Gradient đen mờ từ dưới lên để nổi chữ */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent z-10 rounded-sm pointer-events-none"></div>
-
-          {/* Nội dung chữ (Đã bỏ nền trắng, đổi sang chữ trắng) */}
-          <div className="relative z-20 flex flex-col items-start gap-3 w-full p-6 lg:p-10 mb-2">
-            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-wide">Bộ Sưu Tập Trang Điểm Mùa Xuân</h3>
-            <p className="text-sm sm:text-base text-gray-200 max-w-md leading-relaxed">Hương thơm quyến rũ, lưu hương suốt 24h. Tỏa sáng mọi góc nhìn.</p>
-            <a href="#" className="font-medium underline text-white hover:text-[#DB4444] transition-colors mt-2">Mua Ngay</a>
+        {/* Left hero — spans 2 rows */}
+        <div className="fa-card" style={{ ...card, gridColumn: 1, gridRow: '1 / 3', minHeight: 540, display: 'flex', alignItems: 'flex-end' }}>
+          <ComingSoonBadge />
+          <img src={mainImg || 'https://placehold.co/520x700/1a0a0a/888?text=Bo+Suu+Tap'} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.75 }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.93) 0%,rgba(0,0,0,.28) 55%,transparent 100%)', zIndex: 10 }} />
+          <div style={{ position: 'relative', zIndex: 20, padding: '24px 24px 28px', width: '100%' }}>
+            <p style={{ fontSize: 10, color: 'rgba(219,68,68,.75)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 8, fontFamily: 'sans-serif' }}>Skincare · Collection 2025</p>
+            <h3 style={{ fontSize: 'clamp(1.3rem,2.5vw,1.55rem)', fontWeight: 700, color: '#fff', lineHeight: 1.2, margin: 0 }}>Bộ Sưu Tập Trang Điểm Mùa Xuân</h3>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,.52)', marginTop: 8, lineHeight: 1.65, fontFamily: 'sans-serif' }}>Hương thơm quyến rũ, lưu hương suốt 24h — tỏa sáng mọi góc nhìn.</p>
           </div>
         </div>
 
-        {/* Khối Phải (Chứa 2 khối nhỏ) */}
-        <div className="flex flex-col gap-4 lg:gap-8">
-            
-            {/* Khối Nhỏ Trên */}
-            <div className="relative bg-[#2D2F3A] border border-gray-200 rounded-sm overflow-hidden min-h-[192px] sm:min-h-[240px] lg:min-h-[284px] flex items-end group z-40">
-                
-                <img 
-                    src={topImg || "https://placehold.co/600x300/2D2F3A/dddddd?text=Serum+Phuc+Hoi"} 
-                    alt="Serum Top" 
-                    className="absolute inset-0 w-full h-full object-cover rounded-sm mix-blend-normal group-hover:scale-105 transition-transform duration-700" 
-                />
+        {/* Top right */}
+        <div className="fa-card" style={{ ...card, gridColumn: 2, gridRow: 1, minHeight: 258, display: 'flex', alignItems: 'flex-end' }}>
+          <ComingSoonBadge />
+          <img src={topImg || 'https://placehold.co/520x300/0e0a14/888?text=Serum+B5'} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.72 }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.2) 60%,transparent 100%)', zIndex: 10 }} />
+          <div style={{ position: 'relative', zIndex: 20, padding: '16px 20px 22px', width: '100%' }}>
+            <p style={{ fontSize: 9, color: 'rgba(219,68,68,.75)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 5, fontFamily: 'sans-serif' }}>Serum · Phục hồi</p>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff', margin: 0 }}>Serum Phục Hồi Da B5</h3>
+          </div>
+        </div>
 
-                {/* Overlay Gradient từ dưới lên */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10 rounded-sm pointer-events-none"></div>
-                
-                {/* Nội dung chữ nổi */}
-                <div className="relative z-20 flex flex-col items-start gap-2 p-6 w-full">
-                    <h3 className="text-xl lg:text-2xl font-bold text-white tracking-wide">Serum Phục Hồi Da B5</h3>
-                    <a href="#" className="font-medium underline text-gray-200 hover:text-[#DB4444] transition-colors text-sm">Khám Phá</a>
-                </div>
+        {/* Bottom right */}
+        <div className="fa-card" style={{ ...card, gridColumn: 2, gridRow: 2, minHeight: 258, display: 'flex', alignItems: 'flex-end' }}>
+          <ComingSoonBadge />
+          <img src={bottomImg || 'https://placehold.co/520x300/0a0e14/888?text=Son+Kem+Li'} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.72 }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.2) 60%,transparent 100%)', zIndex: 10 }} />
+          <div style={{ position: 'relative', zIndex: 20, padding: '16px 20px 22px', width: '100%' }}>
+            <p style={{ fontSize: 9, color: 'rgba(219,68,68,.75)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 5, fontFamily: 'sans-serif' }}>Môi · Màu sắc mới</p>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff', margin: 0 }}>Son Kem Lì Mới Nhất</h3>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Divider */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 38 }}>
+        <div style={{ flex: 1, height: 1, background: '#e5e5e5' }} />
+        <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#DB4444' }} />
+        <div style={{ flex: 1, height: 1, background: '#e5e5e5' }} />
+      </div>
+
+      {/* Service Row */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))', gap: 24, textAlign: 'center', fontFamily: 'sans-serif' }}>
+        {[
+          { Icon: Truck, title: 'Miễn Phí Vận Chuyển', sub: 'Áp dụng cho đơn hàng từ 499k' },
+          { Icon: Headphones, title: 'Hỗ Trợ 24/7', sub: 'Luôn sẵn sàng giải đáp thắc mắc' },
+          { Icon: ShieldCheck, title: 'Cam Kết Chính Hãng', sub: 'Đền bù 200% nếu phát hiện hàng giả' },
+        ].map(({ Icon, title, sub }) => (
+          <div key={title} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+            <div
+              style={{ width: 60, height: 60, borderRadius: '50%', background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .25s', cursor: 'default' }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#DB4444'; e.currentTarget.querySelector('svg').style.stroke = '#fff'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = '#f5f5f5'; e.currentTarget.querySelector('svg').style.stroke = '#111'; }}
+            >
+              <Icon size={26} strokeWidth={1.4} style={{ transition: 'stroke .25s', stroke: '#111' }} />
             </div>
-
-            {/* Khối Nhỏ Dưới */}
-            <div className="relative bg-[#2E3C4A] border border-gray-200 rounded-sm overflow-hidden min-h-[192px] sm:min-h-[240px] lg:min-h-[284px] flex items-end group z-40">
-                
-                <img 
-                    src={bottomImg || "https://placehold.co/600x300/2E3C4A/dddddd?text=Son+Kem+Li+Moi"} 
-                    alt="Son Kem Bottom" 
-                    className="absolute inset-0 w-full h-full object-cover rounded-sm mix-blend-normal group-hover:scale-105 transition-transform duration-700" 
-                />
-
-                {/* Overlay Gradient từ dưới lên */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10 rounded-sm pointer-events-none"></div>
-
-                {/* Nội dung chữ nổi */}
-                <div className="relative z-20 flex flex-col items-start gap-2 p-6 w-full">
-                    <h3 className="text-xl lg:text-2xl font-bold text-white tracking-wide">Son Kem Lì Mới Nhất</h3>
-                    <a href="#" className="font-medium underline text-gray-200 hover:text-[#DB4444] transition-colors text-sm">Khám Phá</a>
-                </div>
+            <div>
+              <h4 style={{ fontSize: 11, fontWeight: 700, letterSpacing: 0.4, textTransform: 'uppercase', margin: '0 0 3px', color: '#111' }}>{title}</h4>
+              <p style={{ fontSize: 12, color: '#888', margin: 0, lineHeight: 1.5 }}>{sub}</p>
             </div>
-            
-        </div>
-      </div>
-
-      {/* 4. Khối 3 Icon Dịch vụ VN */}
-      <div className="w-full h-px bg-gray-200 mb-16"></div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center pb-10">
-        
-        <div className="flex flex-col items-center">
-          <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 lg:mb-6 group hover:bg-[#DB4444] transition-colors cursor-pointer">
-            <Truck size={36} strokeWidth={1.5} className="text-black group-hover:text-white transition-colors" />
           </div>
-          <h4 className="font-bold text-base lg:text-lg mb-1 lg:mb-2 text-black uppercase tracking-wide">Miễn Phí Vận Chuyển</h4>
-          <p className="text-xs lg:text-sm text-gray-500">Áp dụng cho đơn hàng từ 499k</p>
-        </div>
-
-        <div className="flex flex-col items-center">
-          <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 lg:mb-6 group hover:bg-[#DB4444] transition-colors cursor-pointer">
-            <Headphones size={36} strokeWidth={1.5} className="text-black group-hover:text-white transition-colors" />
-          </div>
-          <h4 className="font-bold text-base lg:text-lg mb-1 lg:mb-2 text-black uppercase tracking-wide">Hỗ Trợ Trực Tuyến 24/7</h4>
-          <p className="text-xs lg:text-sm text-gray-500">Luôn sẵn sàng giải đáp thắc mắc</p>
-        </div>
-
-        <div className="flex flex-col items-center">
-          <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 lg:mb-6 group hover:bg-[#DB4444] transition-colors cursor-pointer">
-            <ShieldCheck size={36} strokeWidth={1.5} className="text-black group-hover:text-white transition-colors" />
-          </div>
-          <h4 className="font-bold text-base lg:text-lg mb-1 lg:mb-2 text-black uppercase tracking-wide">Cam Kết Chính Hãng</h4>
-          <p className="text-xs lg:text-sm text-gray-500">Đền bù 200% nếu phát hiện hàng giả</p>
-        </div>
-
+        ))}
       </div>
 
     </section>
