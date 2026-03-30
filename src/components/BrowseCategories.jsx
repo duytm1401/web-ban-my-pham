@@ -4,7 +4,7 @@ import {
   ChevronLeft, ChevronRight, Sun, Heart, Leaf, Gift
 } from 'lucide-react';
 
-// CSS animation keyframes inject một lần duy nhất
+// CSS animation keyframes inject 
 const STYLE = `
   @keyframes catPop {
     0%   { transform: scale(1); }

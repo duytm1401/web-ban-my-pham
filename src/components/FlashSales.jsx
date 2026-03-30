@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 import FlashSales1 from '../assets/FlashSales/fsh1.webp';
 import FlashSales2 from '../assets/FlashSales/fsh2.jpg';
@@ -183,9 +184,7 @@ function ProductCard({ item }) {
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   FLASH SALES SECTION
-═══════════════════════════════════════════════════════════════════ */
+  //  FLASH SALES SECTION
 const FlashSales = () => {
 
   /* ── Countdown ── */
@@ -341,15 +340,18 @@ const FlashSales = () => {
 
       {/* ── View All button ── */}
       <div className="mt-10 sm:mt-14 flex justify-center">
-        <button className="group relative overflow-hidden bg-[#DB4444] text-white
-                           px-10 sm:px-14 py-3 sm:py-4 rounded-md
-                           font-semibold text-sm sm:text-base
-                           transition-all duration-300 hover:shadow-[0_4px_20px_rgba(219,68,68,0.4)]
-                           hover:-translate-y-0.5 active:translate-y-0">
+        <Link 
+          to="/danh-muc"
+          className="group relative overflow-hidden bg-[#DB4444] text-white
+                     px-10 sm:px-14 py-3 sm:py-4 rounded-md
+                     font-semibold text-sm sm:text-base
+                     transition-all duration-300 hover:shadow-[0_4px_20px_rgba(219,68,68,0.4)]
+                     hover:-translate-y-0.5 active:translate-y-0 inline-block"
+        >
           <span className="relative z-10">Xem Tất Cả Sản Phẩm</span>
           <div className="absolute inset-0 bg-[#c03838] translate-y-full
                           group-hover:translate-y-0 transition-transform duration-300" />
-        </button>
+        </Link>
       </div>
 
     </section>

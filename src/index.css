@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* NIÊM PHONG TRỤC NGANG TOÀN BỘ TRANG WEB */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100% !important; /* Dùng 100% thay vì 100vw để không bị dính thanh cuộn dọc */
+  width: 100% !important;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* * {
+  outline: 1px solid red !important;
+} */

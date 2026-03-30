@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Heart, Eye, ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 import exp1 from '../assets/ExploreProducts/exp1.jpg';
 import exp2 from '../assets/ExploreProducts/exp2.jpg';
@@ -338,14 +339,18 @@ export default function ExploreProducts() {
 
       {/* View All */}
       <div className="flex justify-center mt-8">
-        <button className="ep-view-all" style={{
-          background:'#DB4444', color:'#fff', border:'none', cursor:'pointer',
-          padding:'13px 44px', borderRadius:3, fontSize:14, fontWeight:600,
-          letterSpacing:'0.03em',
-        }}>
-          Xem Tất Cả Sản Phẩm
-        </button>
-      </div>
+  <Link 
+    to="/danh-muc"
+    className="ep-view-all" 
+    style={{
+      background: '#DB4444', color: '#fff', border: 'none', 
+      cursor: 'pointer',padding: '13px 44px', borderRadius: 3, fontSize: 14, 
+      fontWeight: 600,letterSpacing: '0.03em',display: 'inline-block', textDecoration: 'none'   
+    }}
+  >
+    Xem Tất Cả Sản Phẩm
+  </Link>
+</div>
     </section>
   );
 }

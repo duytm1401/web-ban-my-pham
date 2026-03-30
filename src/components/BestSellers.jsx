@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Heart, Eye, ShoppingCart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 import best1 from '../assets/BestSellers/anh1.png';
 import best2 from '../assets/BestSellers/anh2.jpg';
@@ -371,10 +372,13 @@ export default function BestSellers() {
         <h2 className="text-2xl lg:text-4xl font-bold text-black">
           Sản Phẩm Bán Chạy
         </h2>
-        <button className="bs-view-all px-8 py-3 rounded-sm text-white text-sm font-medium"
-          style={{ background: '#DB4444', border: 'none', cursor: 'pointer' }}>
+        <Link 
+          to="/danh-muc"
+          className="bs-view-all px-8 py-3 rounded-sm text-white text-sm font-medium inline-block"
+          style={{ background: '#DB4444', border: 'none', cursor: 'pointer' }}
+        >
           Xem Tất Cả
-        </button>
+        </Link>
       </div>
 
       {/* Grid */}

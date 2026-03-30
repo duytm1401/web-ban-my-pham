@@ -72,6 +72,44 @@ function ColTitle({ children }) {
   );
 }
 
+/* ── Accordion cho mobile ─────────────────────────────────── */
+function AccordionCol({ title, children }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="footer-accordion">
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          width: '100%', background: 'none', border: 'none',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          cursor: 'pointer', padding: '14px 0',
+          borderBottom: '1px solid rgba(255,255,255,.06)',
+        }}
+      >
+        <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', color: '#fff' }}>
+          {title}
+        </span>
+        <span style={{
+          color: '#6b7280', fontSize: 18, lineHeight: 1,
+          transition: 'transform .25s',
+          display: 'inline-block',
+          transform: open ? 'rotate(45deg)' : 'rotate(0deg)',
+        }}>+</span>
+      </button>
+      <div style={{
+        overflow: 'hidden',
+        maxHeight: open ? '400px' : '0',
+        transition: 'max-height .3s ease',
+        paddingBottom: open ? 12 : 0,
+      }}>
+        <div style={{ paddingTop: 10 }}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── Main Footer ──────────────────────────────────────────── */
 export default function Footer() {
   const [emailFocus, setEmailFocus] = useState(false);
@@ -81,25 +119,56 @@ export default function Footer() {
     <footer style={{ width: '100%', background: '#0c0c0e', color: '#fff', fontFamily: '"DM Sans", sans-serif', overflow: 'hidden' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+        /* Desktop: ẩn accordion, hiện grid */
+        .footer-accordion { display: none; }
+        .footer-links-desktop { display: grid !important; }
+
+        /* Mobile */
+        @media (max-width: 767px) {
+          .footer-top-inner { flex-direction: column !important; align-items: flex-start !important; }
+          .footer-subscribe { max-width: 100% !important; width: 100% !important; }
+          .footer-links-desktop { display: none !important; }
+          .footer-accordion { display: block; }
+          .footer-accordion-wrap { padding: 0 20px 8px !important; }
+          .footer-bottom { flex-direction: column !important; align-items: flex-start !important; padding: 16px 20px !important; }
+          .footer-pay-tags { justify-content: flex-start !important; }
+        }
+
+        /* Tablet */
+        @media (min-width: 768px) and (max-width: 1023px) {
+          .footer-top-inner { flex-wrap: wrap !important; }
+          .footer-subscribe { max-width: 100% !important; width: 100% !important; }
+          .footer-links-desktop { grid-template-columns: repeat(2, 1fr) !important; gap: 32px !important; }
+          .footer-accordion { display: none; }
+        }
       `}</style>
 
       {/* ── Hero Top Band ── */}
-      <div style={{ width: '100%', borderBottom: '1px solid rgba(255,255,255,.06)', padding: '56px 64px 48px', position: 'relative', overflow: 'hidden' }}>
-        {/* Huge ghost text */}
+      <div style={{
+        width: '100%',
+        borderBottom: '1px solid rgba(255,255,255,.06)',
+        padding: 'clamp(28px, 5vw, 56px) clamp(20px, 5vw, 64px) clamp(24px, 4vw, 48px)',
+        position: 'relative', overflow: 'hidden',
+      }}>
+        {/* Ghost text */}
         <div style={{
           position: 'absolute', bottom: -20, left: 40, pointerEvents: 'none', userSelect: 'none',
-          fontFamily: '"Playfair Display", serif', fontSize: 160, fontWeight: 900,
+          fontFamily: '"Playfair Display", serif', fontSize: 'clamp(60px, 14vw, 160px)', fontWeight: 900,
           color: 'rgba(255,255,255,.025)', lineHeight: 1, whiteSpace: 'nowrap',
         }}>AURELIA</div>
 
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 40, position: 'relative', zIndex: 2 }}>
+        <div
+          className="footer-top-inner"
+          style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 32, position: 'relative', zIndex: 2 }}
+        >
           {/* Brand */}
-          <div>
+          <div style={{ minWidth: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-              <div style={{ width: 36, height: 2, background: '#DB4444' }} />
+              <div style={{ width: 36, height: 2, background: '#DB4444', flexShrink: 0 }} />
               <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, color: '#DB4444', textTransform: 'uppercase' }}>Beauty Store</span>
             </div>
-            <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: 'clamp(2.4rem,5vw,4rem)', fontWeight: 900, color: '#fff', lineHeight: 1, letterSpacing: -1, margin: 0 }}>
+            <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: 'clamp(2rem, 5vw, 4rem)', fontWeight: 900, color: '#fff', lineHeight: 1, letterSpacing: -1, margin: 0 }}>
               Aurelia<em style={{ fontStyle: 'italic', color: '#DB4444' }}>.</em>
             </h2>
             <p style={{ fontSize: 14, color: '#6b7280', marginTop: 12, maxWidth: 300, lineHeight: 1.7, fontWeight: 300 }}>
@@ -108,7 +177,7 @@ export default function Footer() {
           </div>
 
           {/* Email subscribe */}
-          <div style={{ flexShrink: 0, maxWidth: 320, width: '100%' }}>
+          <div className="footer-subscribe" style={{ flexShrink: 0, maxWidth: 320, width: '100%' }}>
             <p style={{ fontSize: 12, fontWeight: 500, color: '#9ca3af', letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 12 }}>
               Nhận ưu đãi độc quyền
             </p>
@@ -122,10 +191,11 @@ export default function Footer() {
                 onFocus={() => setEmailFocus(true)}
                 onBlur={() => setEmailFocus(false)}
                 style={{
-                  flex: 1, background: 'rgba(255,255,255,.05)',
+                  flex: 1, minWidth: 0,
+                  background: 'rgba(255,255,255,.05)',
                   border: `1px solid ${emailFocus ? '#DB4444' : 'rgba(255,255,255,.1)'}`,
                   borderRight: 'none', borderRadius: '6px 0 0 6px',
-                  padding: '0 16px', fontSize: 13, color: '#fff',
+                  padding: '0 12px', fontSize: 13, color: '#fff',
                   fontFamily: '"DM Sans", sans-serif', outline: 'none', transition: 'border-color .2s',
                 }}
               />
@@ -133,8 +203,8 @@ export default function Footer() {
                 onMouseEnter={() => setSendHover(true)}
                 onMouseLeave={() => setSendHover(false)}
                 style={{
-                  padding: '0 22px', background: sendHover ? '#bf3535' : '#DB4444',
-                  border: 'none', borderRadius: '0 6px 6px 0',
+                  padding: '0 16px', background: sendHover ? '#bf3535' : '#DB4444',
+                  border: 'none', borderRadius: '0 6px 6px 0', flexShrink: 0,
                   color: '#fff', fontSize: 12, fontWeight: 600, letterSpacing: '.5px',
                   cursor: 'pointer', fontFamily: '"DM Sans", sans-serif',
                   whiteSpace: 'nowrap', transition: 'background .2s',
@@ -147,10 +217,12 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* ── Links Grid ── */}
-      <div style={{ width: '100%', padding: '48px 64px', borderBottom: '1px solid rgba(255,255,255,.06)' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 48 }}>
-
+      {/* ── Links Grid — Desktop & Tablet ── */}
+      <div style={{ width: '100%', padding: 'clamp(28px, 4vw, 48px) clamp(20px, 5vw, 64px)', borderBottom: '1px solid rgba(255,255,255,.06)' }}>
+        <div
+          className="footer-links-desktop"
+          style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 48 }}
+        >
           {/* Liên hệ */}
           <div>
             <ColTitle>Liên Hệ</ColTitle>
@@ -219,14 +291,88 @@ export default function Footer() {
             </div>
           </div>
         </div>
+
+        {/* ── Accordion — Mobile only ── */}
+        <div className="footer-accordion-wrap" style={{ padding: 0 }}>
+
+          <AccordionCol title="Liên Hệ">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                <svg style={{ flexShrink: 0, marginTop: 2 }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DB4444" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                <span style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.6, fontWeight: 300 }}>Phường 1, Gò Vấp,<br />Hồ Chí Minh</span>
+              </div>
+              <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                <svg style={{ flexShrink: 0 }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DB4444" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
+                <NavLink>support@aureliastore.vn</NavLink>
+              </div>
+              <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                <svg style={{ flexShrink: 0 }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DB4444" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.58a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z" /></svg>
+                <NavLink>0936-1836-18</NavLink>
+              </div>
+            </div>
+          </AccordionCol>
+
+          <AccordionCol title="Tài Khoản">
+            <NavLink>Tài khoản của tôi</NavLink>
+            <NavLink>Đăng nhập / Đăng ký</NavLink>
+            <NavLink>Giỏ hàng</NavLink>
+            <NavLink>Danh sách yêu thích</NavLink>
+            <NavLink>Theo dõi đơn hàng</NavLink>
+          </AccordionCol>
+
+          <AccordionCol title="Chính Sách">
+            <NavLink>Chính sách bảo mật</NavLink>
+            <NavLink>Điều khoản sử dụng</NavLink>
+            <NavLink>Câu hỏi thường gặp</NavLink>
+            <NavLink>Chính sách đổi trả</NavLink>
+            <NavLink>Tuyển dụng</NavLink>
+          </AccordionCol>
+
+          <AccordionCol title="Kết Nối">
+            <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+              <SocBtn title="Facebook"><Facebook size={15} /></SocBtn>
+              <SocBtn title="Instagram"><Instagram size={15} /></SocBtn>
+              <SocBtn title="TikTok"><span style={{ fontSize: 10, fontWeight: 700 }}>TT</span></SocBtn>
+              <SocBtn title="YouTube"><Youtube size={15} /></SocBtn>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+              <div>
+                <p style={{ fontSize: 10, color: '#4b5563', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Zalo OA</p>
+                <div style={{ width: 64, height: 64, background: '#fff', borderRadius: 8, padding: 4 }}>
+                  <img src={qrCodeImg || 'https://placehold.co/56x56/f5f5f5/bbb?text=QR'} alt="QR" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 4 }} />
+                </div>
+              </div>
+              <div>
+                <p style={{ fontSize: 10, color: '#4b5563', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Đã xác nhận</p>
+                <img
+                  src={bctImg || 'https://placehold.co/100x36/181820/666?text=Bộ+Công+Thương'}
+                  alt="Bộ Công Thương"
+                  style={{ height: 28, opacity: 0.65 }}
+                />
+              </div>
+            </div>
+          </AccordionCol>
+
+        </div>
       </div>
 
       {/* ── Bottom Bar ── */}
-      <div style={{ width: '100%', padding: '18px 64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-        <p style={{ fontSize: 12, color: '#374151' }}>
-          © {new Date().getFullYear()} <span style={{ color: '#6b7280' }}>Aurelia Store</span> — Được hoàn thành bởi các thanh viên nhóm 8.
+      <div
+        className="footer-bottom"
+        style={{
+          width: '100%',
+          padding: '18px clamp(20px, 5vw, 64px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          flexWrap: 'wrap', gap: 12,
+        }}
+      >
+        <p style={{ fontSize: 12, color: '#374151', margin: 0 }}>
+          © {new Date().getFullYear()} <span style={{ color: '#6b7280' }}>Aurelia Store</span> — Được hoàn thành bởi các thành viên nhóm 8.
         </p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        <div
+          className="footer-pay-tags"
+          style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}
+        >
           {['VISA', 'MASTERCARD', 'MOMO', 'VNPAY', 'ZALOPAY', 'COD'].map(m => <PayTag key={m}>{m}</PayTag>)}
         </div>
       </div>

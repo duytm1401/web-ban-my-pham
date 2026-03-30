@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 import promoImage from '../assets/son-ysl-01.jpg';
 
@@ -202,7 +203,7 @@ export default function PromoBanner() {
             {/* Heading — 2 dòng thu gọn */}
             <div style={{ marginBottom: 16 }}>
               <h2 className="pb-heading" style={{
-                fontSize: 'clamp(28px, 4vw, 48px)',   // ↓ clamp(36px,5vw,60px)
+                fontSize: 'clamp(28px, 4vw, 48px)',   
                 fontWeight: 700, color: '#fff',
                 lineHeight: 1.1, margin: 0, letterSpacing: '-0.01em',
               }}>
@@ -239,21 +240,29 @@ export default function PromoBanner() {
 
             {/* CTA */}
             <div className="pb-cta" style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
-              <button className="pb-btn" style={{
-                background: '#DB4444', color: '#fff', border: 'none',
-                padding: '11px 28px', borderRadius: 3,       // ↓ 14px 32px
-                fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                letterSpacing: '0.05em', textTransform: 'uppercase',
-              }}>
+              <Link 
+                to="/san-pham/1" 
+                className="pb-btn" 
+                style={{
+                  background: '#DB4444', color: '#fff', border: 'none',padding: '11px 28px', 
+                  borderRadius: 3,fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                  letterSpacing: '0.05em', textTransform: 'uppercase',display: 'inline-block',textDecoration: 'none'
+                }}
+              >
                 Mua Ngay
-              </button>
-              <a href="#" style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, textDecoration: 'none',
-                borderBottom: '1px solid rgba(255,255,255,0.18)', paddingBottom: 2, transition: 'color 200ms ease' }}
+              </Link>
+
+              <Link 
+                to="/san-pham/1" 
+                style={{ 
+                  color: 'rgba(255,255,255,0.45)', fontSize: 12, textDecoration: 'none',
+                  borderBottom: '1px solid rgba(255,255,255,0.18)', paddingBottom: 2, transition: 'color 200ms ease' 
+                }}
                 onMouseEnter={e => e.target.style.color = '#fff'}
                 onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.45)'}
               >
                 Xem chi tiết →
-              </a>
+              </Link>
             </div>
           </div>
 
