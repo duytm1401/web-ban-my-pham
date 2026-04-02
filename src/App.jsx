@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 
-// Import Components & Layouts
+// Import Components & Layouts (Khách Hàng)
 import ClientLayout from './layouts/ClientLayout';
 import Home from './pages/client/Home';
 import AuthPage from './pages/auth/AuthPage';
@@ -14,6 +14,15 @@ import CheckoutPage from './pages/client/CheckoutPage';
 import ProductDetailPage from './pages/client/ProductDetailPage';
 import WishlistPage from './pages/client/WishlistPage';
 import ProfilePage from './pages/client/ProfilePage';
+
+// Import Components & Layouts (Admin)
+import AdminLayout from './layouts/AdminLayout'; 
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminProducts from './pages/admin/AdminProducts';
+import AdminOrders from './pages/admin/AdminOrders';
+import AdminCustomers from './pages/admin/AdminCustomers';
+import AdminReports from './pages/admin/AdminReports';
+import AdminSettings from './pages/admin/AdminSettings';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -32,6 +41,7 @@ function App() {
         <ScrollToTop />
 
         <Routes>
+          {/* TRANG KHÁCH HÀNG */}
           <Route path="/" element={<ClientLayout />}>
             <Route index element={<Home />} /> 
             <Route path="login" element={<AuthPage />} />
@@ -46,10 +56,15 @@ function App() {
             <Route path="profile" element={<ProfilePage />} />
           </Route>
 
-          {/* TRANG ADMIN (Sẽ dùng AdminLayout sau) */}
-          {/* <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<Dashboard />} />
-          </Route> */}
+          {/* TRANG ADMIN */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="products" element={<AdminProducts />} />
+            <Route path="orders" element={<AdminOrders />} />
+            <Route path="customers" element={<AdminCustomers />} />
+            <Route path="reports" element={<AdminReports />} />
+            <Route path="settings" element={<AdminSettings />} />
+          </Route>
 
         </Routes>
       </BrowserRouter>

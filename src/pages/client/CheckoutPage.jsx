@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronDown, Check, MapPin, Phone, User, Mail, ChevronRight, Shield, Truck, RotateCcw } from 'lucide-react';
+import { useCart } from '../../context/CartContext'; // KÉO ỐNG NƯỚC GIỎ HÀNG VÀO
 
-// ── Dữ liệu địa chỉ mẫu ──────────────────────────────────────────────────────
+// ── Dữ liệu địa chỉ & Thanh toán mẫu ──────────────────────────────────────────
 const PROVINCES = ["TP. Hồ Chí Minh", "Hà Nội", "Đà Nẵng", "Bình Dương", "Đồng Nai", "Cần Thơ", "Hải Phòng"];
 const DISTRICTS = {
   "TP. Hồ Chí Minh": ["Quận 1", "Quận 3", "Quận 7", "Bình Thạnh", "Gò Vấp", "Tân Bình", "Thủ Đức"],
@@ -21,50 +22,31 @@ const PAYMENT_METHODS = [
     id: "cod",
     label: "Thanh toán khi nhận hàng (COD)",
     desc: "Trả tiền mặt khi nhận hàng",
-    icon: <img src="/images/logo_COD.png" alt="COD" className="w-8 h-8 object-contain rounded-md" />,
+    icon: <img src="/images/anh-thanh-toan/logo_COD.png" alt="COD" className="w-8 h-8 object-contain rounded-md" />,
   },
   {
     id: "momo",
     label: "Ví MoMo",
     desc: "Thanh toán qua ví điện tử MoMo",
-    icon: <img src="/images/logo_momo.webp" alt="MoMo" className="w-8 h-8 object-contain rounded-md" />,
+    icon: <img src="/images/anh-thanh-toan/logo_momo.webp" alt="MoMo" className="w-8 h-8 object-contain rounded-md" />,
   },
   {
     id: "vnpay",
     label: "VNPay",
     desc: "Thanh toán qua cổng VNPay",
-    icon: <img src="/images/logo_vnpay.jpg" alt="VNPay" className="w-8 h-8 object-contain" />,
+    icon: <img src="/images/anh-thanh-toan/logo_vnpay.jpg" alt="VNPay" className="w-8 h-8 object-contain" />,
   },
   {
     id: "zalopay",
     label: "ZaloPay",
     desc: "Thanh toán qua ví ZaloPay",
-    icon: <img src="/images/logo_zalo.png" alt="ZaloPay" className="w-8 h-8 object-contain rounded-md" />,
+    icon: <img src="/images/anh-thanh-toan/logo_zalo.png" alt="ZaloPay" className="w-8 h-8 object-contain rounded-md" />,
   },
   {
     id: "bank",
     label: "Chuyển khoản ngân hàng",
     desc: "Chuyển khoản trực tiếp tới tài khoản",
-    icon: <img src="/images/logo_banking.png" alt="banking" className="w-8 h-8 object-contain rounded-md" />,
-  },
-];
-
-const ORDER_ITEMS = [
-  {
-    id: 1,
-    name: "Sữa Rửa Mặt La Roche-Posay Purifying Foaming",
-    brand: "La Roche-Posay",
-    price: 420000,
-    quantity: 1,
-    image: "/images/anh1.jpg",
-  },
-  {
-    id: 2,
-    name: "Serum Phục Hồi Estee Lauder Advanced Night Repair",
-    brand: "Estée Lauder",
-    price: 2500000,
-    quantity: 2,
-    image: "/images/anh2.jpg",
+    icon: <img src="/images/anh-thanh-toan/logo_banking.png" alt="banking" className="w-8 h-8 object-contain rounded-md" />,
   },
 ];
 
@@ -72,7 +54,6 @@ const ORDER_ITEMS = [
 const fmt = (n) => n.toLocaleString("vi-VN");
 
 // ── Sub-components ────────────────────────────────────────────────────────────
-
 const SectionCard = ({ step, title, children }) => (
   <div className="bg-white border border-gray-100 rounded-sm shadow-sm overflow-hidden">
     <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gray-50/60">
@@ -127,6 +108,9 @@ const SelectField = ({ label, required, value, onChange, options, placeholder })
 
 // ── Main Component ─────────────────────────────────────────────────────────────
 export default function CheckoutPage() {
+  // LẤY DỮ LIỆU TỪ KHO CHUNG
+  const { cartItems, clearCart } = useCart();
+
   // Form state
   const [form, setForm] = useState({
     fullName: "", phone: "", email: "", note: "",
@@ -144,7 +128,8 @@ export default function CheckoutPage() {
   const districts = DISTRICTS[form.province] || [];
   const wards = WARDS[form.district] || [];
 
-  const subtotal = ORDER_ITEMS.reduce((s, i) => s + i.price * i.quantity, 0);
+  // TÍNH TOÁN TIỀN BẠC (Dựa trên cartItems thật)
+  const subtotal = cartItems.reduce((s, i) => s + i.price * i.quantity, 0);
   const shippingFee = shippingMethod === "express" ? 45000 : shippingMethod === "same_day" ? 75000 : 0;
   const discount = couponApplied ? 50000 : 0;
   const total = subtotal + shippingFee - discount;
@@ -155,17 +140,25 @@ export default function CheckoutPage() {
   };
 
   const handleOrder = () => {
+    if (cartItems.length === 0) { 
+      alert("Giỏ hàng rỗng, không thể đặt hàng!"); 
+      return; 
+    }
     const required = ["fullName", "phone", "province", "district", "ward", "address"];
     const missing = required.filter((k) => !form[k]);
     if (missing.length) { alert("Vui lòng điền đầy đủ thông tin bắt buộc."); return; }
     if (!agreeTerms) { alert("Vui lòng đồng ý với điều khoản dịch vụ."); return; }
+    
+    // Đặt hàng thành công
     setSubmitted(true);
+    clearCart(); // DỌN SẠCH GIỎ HÀNG THẬT
+    window.scrollTo(0, 0);
   };
 
   // ── Success Screen ──
   if (submitted) {
     return (
-      <div className="bg-white min-h-[80vh] flex flex-col items-center justify-center px-4 font-body">
+      <div className="bg-white min-h-[80vh] flex flex-col items-center justify-center px-4 font-body mt-[72px]">
         <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center mb-6 border-4 border-green-100">
           <Check size={36} className="text-green-500" strokeWidth={2.5} />
         </div>
@@ -188,7 +181,7 @@ export default function CheckoutPage() {
 
   // ── Main Checkout ──
   return (
-    <div className="bg-[#F5F5F5] min-h-screen pb-20 font-body">
+    <div className="bg-[#F5F5F5] min-h-screen pb-20 font-body mt-[72px]">
 
       {/* BREADCRUMB */}
       <div className="bg-white border-b border-gray-100">
@@ -368,15 +361,15 @@ export default function CheckoutPage() {
           {/* ═══ CỘT PHẢI — TÓM TẮT ĐƠN HÀNG ══════════════════════════════ */}
           <div className="w-full lg:w-[380px] flex-shrink-0 flex flex-col gap-4 lg:sticky lg:top-6">
 
-            {/* Danh sách sản phẩm */}
+            {/* Danh sách sản phẩm TỪ KHO THẬT */}
             <div className="bg-white border border-gray-100 rounded-sm shadow-sm overflow-hidden">
               <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/60">
                 <h2 className="font-display font-semibold text-gray-900 text-base">
-                  Đơn hàng ({ORDER_ITEMS.reduce((s, i) => s + i.quantity, 0)} sản phẩm)
+                  Đơn hàng ({cartItems.reduce((s, i) => s + i.quantity, 0)} sản phẩm)
                 </h2>
               </div>
               <div className="divide-y divide-gray-50">
-                {ORDER_ITEMS.map((item) => (
+                {cartItems.map((item) => (
                   <div key={item.id} className="flex items-center gap-3 px-6 py-4">
                     <div className="relative flex-shrink-0">
                       <img src={item.image} alt={item.name} className="w-14 h-14 rounded-sm object-cover bg-gray-50 mix-blend-multiply" />
@@ -385,7 +378,7 @@ export default function CheckoutPage() {
                       </span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-0.5">{item.brand}</p>
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-0.5">{item.brand || "AURELIA"}</p>
                       <p className="text-sm text-gray-900 font-medium line-clamp-2 leading-snug">{item.name}</p>
                     </div>
                     <span className="text-sm font-semibold text-gray-900 flex-shrink-0 ml-2">

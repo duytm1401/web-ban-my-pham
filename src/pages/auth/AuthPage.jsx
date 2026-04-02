@@ -1,42 +1,35 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext'; // Nhớ giữ dòng này nhé
+import { useAuth } from '../../context/AuthContext'; 
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
-  const { login } = useAuth(); // Gọi hàm login từ Context
+  const { login } = useAuth(); // Lấy hàm login từ bộ não trung tâm
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
-  // 1. TẠO STATE LƯU TRỮ THÔNG BÁO LỖI
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isLogin) {
-      if (email === 'admin@aureliastore.vn' && password === 'admin123') {
-        login();
-        navigate('/'); 
-      } else if (email === 'khachhang@gmail.com' && password === '123456') {
-        login();
-        navigate('/'); 
-      } else {
-        // 2. THAY VÌ ALERT, MÌNH SET CÂU THÔNG BÁO VÀO STATE
-        setErrorMessage('Thông tin đăng nhập không chính xác. Vui lòng thử lại!');
-      }
+    e.preventDefault(); 
+    setErrorMessage(''); // Xoá lỗi cũ trước khi thử đăng nhập mới
+
+    // Gọi hàm login từ Context
+    const role = login(email, password);
+
+    if (role === 'admin') {
+      navigate('/admin'); 
+    } else if (role === 'user') {
+      navigate('/'); // Đăng nhập xong nhảy về Trang chủ
     } else {
-      alert(`Tạo tài khoản thành công cho: ${name} (${email})\nBây giờ bạn có thể đăng nhập!`);
-      setIsLogin(true); 
-      setPassword('');
-      setErrorMessage(''); // Chuyển qua form đăng nhập thì xoá lỗi đi cho sạch
+      setErrorMessage("Email hoặc mật khẩu không chính xác!");
     }
   };
 
   return (
-    <div className="min-h-[75vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-white">
+    <div className="min-h-[75vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-white mt-[72px]">
       
       <div className="w-full max-w-[480px] p-8 sm:p-12 border border-gray-100 shadow-[0_8px_40px_rgba(0,0,0,0.06)] rounded-sm">
         
@@ -44,6 +37,7 @@ export default function AuthPage() {
           <h2 className="text-3xl font-bold tracking-wider mb-3 text-black">
             {isLogin ? 'Đăng Nhập' : 'Tạo tài khoản'}
           </h2>
+          <p className="text-gray-500 text-sm">Chào mừng bạn đến với Aurelia Store</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
@@ -51,11 +45,11 @@ export default function AuthPage() {
           {!isLogin && (
             <input 
               type="text" 
-              placeholder="Name" 
+              placeholder="Họ và tên" 
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              onFocus={() => setErrorMessage('')} // Click vào là xoá lỗi
+              onFocus={() => setErrorMessage('')}
               className="w-full border-b border-gray-300 py-2.5 focus:outline-none focus:border-[#DB4444] transition-colors bg-transparent text-black"
             />
           )}
@@ -66,57 +60,53 @@ export default function AuthPage() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            onFocus={() => setErrorMessage('')} // 3. CLICK VÀO LÀ XOÁ THÔNG BÁO LỖI
+            onFocus={() => setErrorMessage('')}
             className="w-full border-b border-gray-300 py-2.5 focus:outline-none focus:border-[#DB4444] transition-colors bg-transparent text-black"
           />
 
-          <input 
-            type="password" 
-            placeholder="Mật khẩu" 
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onFocus={() => setErrorMessage('')} // 3. CLICK VÀO LÀ XOÁ THÔNG BÁO LỖI
-            className="w-full border-b border-gray-300 py-2.5 focus:outline-none focus:border-[#DB4444] transition-colors bg-transparent text-black"
-          />
-
-          {/* HIỂN THỊ DÒNG LỖI MÀU ĐỎ NGAY DƯỚI PASSWORD */}
-          {errorMessage && isLogin && (
-            <div className="text-[#DB4444] text-sm font-medium -mt-4">
-              {errorMessage}
-            </div>
-          )}
-
-          {/* KHU VỰC NÚT BẤM */}
-          <div className="pt-2 space-y-4">
-            
-            {!isLogin ? (
-              <button type="submit" className="w-full bg-[#DB4444] text-white py-4 rounded-sm font-medium hover:bg-red-600 transition-colors shadow-sm">
-                Tạo tài khoản
-              </button>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {/* Quên mật khẩu nằm đúng ngay dưới dòng báo lỗi (nếu có) và trên nút Đăng nhập */}
-                <div className="text-right w-full">
-                  <span 
-                    onClick={() => alert('Giao diện Khôi phục mật khẩu sẽ được cập nhật sau!')}
-                    className="text-[#DB4444] text-sm hover:underline font-medium cursor-pointer"
-                  >
-                    Quên mật khẩu?
-                  </span>
-                </div>
-                
-                <button type="submit" className="w-full bg-[#DB4444] text-white py-4 rounded-sm font-medium hover:bg-red-600 transition-colors shadow-sm">
-                  Đăng nhập
-                </button>
+          <div className="relative">
+            <input 
+              type="password" 
+              placeholder="Mật khẩu" 
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onFocus={() => setErrorMessage('')}
+              className="w-full border-b border-gray-300 py-2.5 focus:outline-none focus:border-[#DB4444] transition-colors bg-transparent text-black"
+            />
+            {/* HIỂN THỊ DÒNG LỖI MÀU ĐỎ NGAY DƯỚI PASSWORD */}
+            {errorMessage && isLogin && (
+              <div className="text-[#DB4444] text-xs font-medium mt-2 absolute">
+                {errorMessage}
               </div>
             )}
+          </div>
 
-            {/* Nút Google (LUÔN HIỂN THỊ) */}
+          <div className="pt-4 space-y-4">
+            {isLogin && (
+              <div className="text-right w-full">
+                <span 
+                  onClick={() => alert('Chức năng đang phát triển!')}
+                  className="text-[#DB4444] text-sm hover:underline font-medium cursor-pointer"
+                >
+                  Quên mật khẩu?
+                </span>
+              </div>
+            )}
+            
+            <button type="submit" className="w-full bg-[#DB4444] text-white py-4 rounded-sm font-medium hover:bg-red-600 transition-colors shadow-sm uppercase tracking-widest text-sm">
+              {isLogin ? 'Đăng nhập' : 'Tạo tài khoản'}
+            </button>
+
+            <div className="relative py-2">
+               <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200"></div></div>
+               <div className="relative flex justify-center text-xs uppercase"><span className="bg-white px-2 text-gray-400">Hoặc</span></div>
+            </div>
+
             <button 
               type="button" 
               onClick={() => alert('Chức năng Google đang được phát triển!')}
-              className="w-full border border-gray-300 text-black py-3.5 rounded-sm font-medium flex justify-center items-center gap-3 hover:bg-gray-50 transition-colors mt-2"
+              className="w-full border border-gray-300 text-black py-3.5 rounded-sm font-medium flex justify-center items-center gap-3 hover:bg-gray-50 transition-colors"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -126,27 +116,19 @@ export default function AuthPage() {
               </svg>
               Tiếp tục với Google
             </button>
-
           </div>
         </form>
 
-        {/* Text chuyển đổi */}
         <div className="mt-10 text-center text-gray-600">
-          {isLogin ? (
-            <p>
-              Chưa có tài khoản? 
-              <span onClick={() => { setIsLogin(false); setErrorMessage(''); }} className="text-black font-semibold border-b border-gray-400 cursor-pointer pb-0.5 ml-2 hover:text-[#DB4444] hover:border-[#DB4444] transition-colors">
-                Đăng ký
-              </span>
-            </p>
-          ) : (
-            <p>
-              Đã có tài khoản? 
-              <span onClick={() => { setIsLogin(true); setErrorMessage(''); }} className="text-black font-semibold border-b border-gray-400 cursor-pointer pb-0.5 ml-2 hover:text-[#DB4444] hover:border-[#DB4444] transition-colors">
-                Đăng nhập
-              </span>
-            </p>
-          )}
+          <p>
+            {isLogin ? "Chưa có tài khoản?" : "Đã có tài khoản?"}
+            <span 
+              onClick={() => { setIsLogin(!isLogin); setErrorMessage(''); }} 
+              className="text-black font-semibold border-b border-gray-400 cursor-pointer pb-0.5 ml-2 hover:text-[#DB4444] hover:border-[#DB4444] transition-colors"
+            >
+              {isLogin ? "Đăng ký" : "Đăng nhập"}
+            </span>
+          </p>
         </div>
 
       </div>

@@ -1,83 +1,43 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
-import promoImage from '../assets/son-ysl-01.jpg';
-
 const STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap');
-
-  @keyframes pb-fadeLeft {
-    from { opacity: 0; transform: translateX(-28px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-  @keyframes pb-fadeRight {
-    from { opacity: 0; transform: translateX(28px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-  @keyframes pb-fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes pb-glow {
-    0%, 100% { opacity: 0.16; transform: scale(1); }
-    50%       { opacity: 0.28; transform: scale(1.05); }
-  }
-  @keyframes pb-float {
-    0%, 100% { transform: translateY(0px); }
-    50%       { transform: translateY(-8px); }
-  }
-  @keyframes pb-shimmer {
-    0%   { background-position: -200% center; }
-    100% { background-position: 200% center; }
-  }
-  @keyframes pb-flip {
-    0%   { transform: translateY(-5px); opacity: 0; }
-    100% { transform: translateY(0);    opacity: 1; }
-  }
+  @keyframes pb-fadeLeft { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes pb-fadeRight { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes pb-fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pb-glow { 0%, 100% { opacity: 0.16; transform: scale(1); } 50% { opacity: 0.28; transform: scale(1.05); } }
+  @keyframes pb-float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+  @keyframes pb-shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+  @keyframes pb-flip { 0% { transform: translateY(-5px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
 
   .pb-label   { animation: pb-fadeLeft 550ms cubic-bezier(0.4,0,0.2,1) both; animation-delay: 60ms; }
-  .pb-heading { animation: pb-fadeLeft 550ms cubic-bezier(0.4,0,0.2,1) both; animation-delay: 150ms;
-                font-family: 'Cormorant Garamond', Georgia, serif; }
+  .pb-heading { animation: pb-fadeLeft 550ms cubic-bezier(0.4,0,0.2,1) both; animation-delay: 150ms; font-family: 'Cormorant Garamond', Georgia, serif; }
   .pb-timer   { animation: pb-fadeUp  550ms cubic-bezier(0.4,0,0.2,1) both; animation-delay: 260ms; }
   .pb-cta     { animation: pb-fadeUp  550ms cubic-bezier(0.4,0,0.2,1) both; animation-delay: 360ms; }
   .pb-image-wrap { animation: pb-fadeRight 600ms cubic-bezier(0.4,0,0.2,1) both; animation-delay: 180ms; }
-
   .pb-img-float  { animation: pb-float 5s ease-in-out infinite; }
   .pb-glow-orb   { animation: pb-glow  4s ease-in-out infinite; }
 
   .pb-shimmer-line {
-    background: linear-gradient(90deg,
-      transparent 0%, rgba(219,68,68,0.7) 40%,
-      rgba(255,255,255,0.85) 50%, rgba(219,68,68,0.7) 60%, transparent 100%);
-    background-size: 200% auto;
-    animation: pb-shimmer 3s linear infinite;
+    background: linear-gradient(90deg, transparent 0%, rgba(219,68,68,0.7) 40%, rgba(255,255,255,0.85) 50%, rgba(219,68,68,0.7) 60%, transparent 100%);
+    background-size: 200% auto; animation: pb-shimmer 3s linear infinite;
   }
   .pb-digit-flip { animation: pb-flip 180ms cubic-bezier(0.4,0,0.2,1); }
-
   .pb-btn {
-    transition: background 200ms ease, transform 200ms cubic-bezier(0.4,0,0.2,1),
-                box-shadow 200ms ease, letter-spacing 200ms ease;
+    transition: background 200ms ease, transform 200ms cubic-bezier(0.4,0,0.2,1), box-shadow 200ms ease, letter-spacing 200ms ease;
     position: relative; overflow: hidden;
   }
   .pb-btn::after {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+    content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
     opacity: 0; transition: opacity 200ms ease;
   }
   .pb-btn:hover::after { opacity: 1; }
-  .pb-btn:hover {
-    background: #c03838 !important; transform: translateY(-2px);
-    box-shadow: 0 10px 28px rgba(219,68,68,0.42); letter-spacing: 0.06em;
-  }
+  .pb-btn:hover { background: #c03838 !important; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(219,68,68,0.42); letter-spacing: 0.06em; }
   .pb-btn:active { transform: translateY(0); box-shadow: none; }
-
-  .pb-noise {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-    opacity: 0.03; mix-blend-mode: overlay;
-  }
+  .pb-noise { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity: 0.03; mix-blend-mode: overlay; }
 `;
 
-// ── Timer Block — thu nhỏ lại ─────────────────────────────────────
 function TimerBlock({ value, label }) {
   const [prevVal, setPrevVal] = useState(value);
   const [flip, setFlip]       = useState(false);
@@ -93,36 +53,17 @@ function TimerBlock({ value, label }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-      <div style={{
-        width: 52, height: 52,                          // ↓ 64→52
-        background: 'rgba(255,255,255,0.06)',
-        border: '1px solid rgba(255,255,255,0.11)',
-        borderRadius: 5,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        backdropFilter: 'blur(4px)',
-        position: 'relative', overflow: 'hidden',
-      }}>
-        <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: '50%',
-          background: 'linear-gradient(to bottom, rgba(255,255,255,0.05), transparent)',
-          pointerEvents: 'none',
-        }} />
-        <span className={flip ? 'pb-digit-flip' : ''} style={{
-          fontSize: 20, fontWeight: 700, color: '#fff',  // ↓ 26→20
-          lineHeight: 1, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.02em',
-        }}>
-          {pad}
-        </span>
+      <div style={{ width: 52, height: 52, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.11)', borderRadius: 5, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '50%', background: 'linear-gradient(to bottom, rgba(255,255,255,0.05), transparent)', pointerEvents: 'none' }} />
+        <span className={flip ? 'pb-digit-flip' : ''} style={{ fontSize: 20, fontWeight: 700, color: '#fff', lineHeight: 1, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.02em' }}>{pad}</span>
       </div>
-      <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-        {label}
-      </span>
+      <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{label}</span>
     </div>
   );
 }
 
-// ── MAIN ─────────────────────────────────────────────────────────────
-export default function PromoBanner() {
+// NHẬN BIẾN `banner` TỪ THẺ CHA
+export default function PromoBanner({ banner }) {
   const injected = useRef(false);
   const [timeLeft, setTimeLeft] = useState({ days: 5, hours: 23, minutes: 59, seconds: 35 });
 
@@ -151,83 +92,48 @@ export default function PromoBanner() {
     return () => clearInterval(timer);
   }, []);
 
+  // Nếu không có dữ liệu truyền vào thì ẩn
+  if (!banner) return null;
+
   return (
     <section className="mt-10 lg:mt-20 mb-10 lg:mb-20">
-      <div style={{
-        background: 'linear-gradient(135deg, #0a0a0a 0%, #111 50%, #0d0d0d 100%)',
-        borderRadius: 4, overflow: 'hidden',
-        position: 'relative',
-        minHeight: 280,           // ↓ 400→280 — chiều cao tối thiểu ngắn hơn
-        display: 'flex', alignItems: 'stretch',
-      }}>
-
-        {/* Noise */}
+      <div style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #111 50%, #0d0d0d 100%)', borderRadius: 4, overflow: 'hidden', position: 'relative', minHeight: 280, display: 'flex', alignItems: 'stretch' }}>
         <div className="pb-noise" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1 }} />
-
-        {/* Decor */}
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1, overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: 0, left: 0, width: 90, height: 90,
-            borderTop: '1px solid rgba(219,68,68,0.3)', borderLeft: '1px solid rgba(219,68,68,0.3)', borderTopLeftRadius: 4 }} />
-          <div style={{ position: 'absolute', bottom: 0, right: 0, width: 90, height: 90,
-            borderBottom: '1px solid rgba(219,68,68,0.18)', borderRight: '1px solid rgba(219,68,68,0.18)', borderBottomRightRadius: 4 }} />
+          <div style={{ position: 'absolute', top: 0, left: 0, width: 90, height: 90, borderTop: '1px solid rgba(219,68,68,0.3)', borderLeft: '1px solid rgba(219,68,68,0.3)', borderTopLeftRadius: 4 }} />
+          <div style={{ position: 'absolute', bottom: 0, right: 0, width: 90, height: 90, borderBottom: '1px solid rgba(219,68,68,0.18)', borderRight: '1px solid rgba(219,68,68,0.18)', borderBottomRightRadius: 4 }} />
           <div className="pb-shimmer-line" style={{ position: 'absolute', bottom: 40, left: 0, right: 0, height: 1, opacity: 0.25 }} />
           <svg style={{ position: 'absolute', right: 0, top: 0, opacity: 0.05 }} width="220" height="220" viewBox="0 0 220 220">
-            {Array.from({ length: 6 }).map((_, r) =>
-              Array.from({ length: 6 }).map((_, c) => (
-                <circle key={`${r}-${c}`} cx={c * 36 + 18} cy={r * 36 + 18} r="1.5" fill="white" />
-              ))
-            )}
+            {Array.from({ length: 6 }).map((_, r) => Array.from({ length: 6 }).map((_, c) => (
+              <circle key={`${r}-${c}`} cx={c * 36 + 18} cy={r * 36 + 18} r="1.5" fill="white" />
+            )))}
           </svg>
         </div>
 
-        {/* Content — padding dọc ngắn hơn */}
-        <div style={{
-          position: 'relative', zIndex: 2, width: '100%',
-          display: 'flex', flexDirection: 'row', alignItems: 'center',
-          flexWrap: 'wrap',
-          padding: 'clamp(24px, 4vw, 48px)',  // ↓ clamp(32px,5vw,64px) → nhỏ hơn
-          gap: 24,
-        }}>
-
+        <div style={{ position: 'relative', zIndex: 2, width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', padding: 'clamp(24px, 4vw, 48px)', gap: 24 }}>
           {/* ══ LEFT ══ */}
           <div style={{ flex: '1 1 280px', display: 'flex', flexDirection: 'column' }}>
-
-            {/* Tag */}
             <div className="pb-label" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
               <div style={{ width: 20, height: 2, background: '#DB4444', borderRadius: 2 }} />
               <span style={{ color: '#DB4444', fontSize: 11, fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase' }}>
-                Sản phẩm nổi bật
+                {banner.tag}
               </span>
             </div>
 
-            {/* Heading — 2 dòng thu gọn */}
             <div style={{ marginBottom: 16 }}>
-              <h2 className="pb-heading" style={{
-                fontSize: 'clamp(28px, 4vw, 48px)',   
-                fontWeight: 700, color: '#fff',
-                lineHeight: 1.1, margin: 0, letterSpacing: '-0.01em',
-              }}>
-                Nâng Tầm{' '}
-                <span style={{ color: '#DB4444' }}>Vẻ Đẹp</span>
+              <h2 className="pb-heading" style={{ fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 700, color: '#fff', lineHeight: 1.1, margin: 0, letterSpacing: '-0.01em' }}>
+                {banner.title1} <span style={{ color: '#DB4444' }}>{banner.highlight}</span>
               </h2>
-              <h2 className="pb-heading" style={{
-                fontSize: 'clamp(28px, 4vw, 48px)',
-                fontWeight: 700, color: '#fff',
-                lineHeight: 1.1, margin: 0, letterSpacing: '-0.01em',
-              }}>
-                Của Bạn
+              <h2 className="pb-heading" style={{ fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 700, color: '#fff', lineHeight: 1.1, margin: 0, letterSpacing: '-0.01em' }}>
+                {banner.title2}
               </h2>
             </div>
 
-            {/* Divider */}
             <div style={{ width: 40, height: 1, background: 'linear-gradient(90deg, rgba(219,68,68,0.8), transparent)', marginBottom: 16 }} />
-
-            {/* Subtitle — thu gọn */}
             <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, lineHeight: 1.5, marginBottom: 24, maxWidth: 300 }}>
-              Khuyến mãi có giới hạn — Đặt hàng trước khi hết ưu đãi.
+              {banner.description}
             </p>
 
-            {/* Countdown — inline, gọn hơn */}
             <div className="pb-timer" style={{ display: 'flex', gap: 10, marginBottom: 28, alignItems: 'flex-start' }}>
               <TimerBlock value={timeLeft.days}    label="Ngày" />
               <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 18, paddingTop: 11, fontWeight: 300 }}>:</span>
@@ -238,74 +144,21 @@ export default function PromoBanner() {
               <TimerBlock value={timeLeft.seconds} label="Giây" />
             </div>
 
-            {/* CTA */}
             <div className="pb-cta" style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
-              <Link 
-                to="/san-pham/1" 
-                className="pb-btn" 
-                style={{
-                  background: '#DB4444', color: '#fff', border: 'none',padding: '11px 28px', 
-                  borderRadius: 3,fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                  letterSpacing: '0.05em', textTransform: 'uppercase',display: 'inline-block',textDecoration: 'none'
-                }}
-              >
+              <Link to={banner.linkTarget} className="pb-btn" style={{ background: '#DB4444', color: '#fff', border: 'none',padding: '11px 28px', borderRadius: 3,fontSize: 13, fontWeight: 600, cursor: 'pointer', letterSpacing: '0.05em', textTransform: 'uppercase',display: 'inline-block',textDecoration: 'none' }}>
                 Mua Ngay
               </Link>
-
-              <Link 
-                to="/san-pham/1" 
-                style={{ 
-                  color: 'rgba(255,255,255,0.45)', fontSize: 12, textDecoration: 'none',
-                  borderBottom: '1px solid rgba(255,255,255,0.18)', paddingBottom: 2, transition: 'color 200ms ease' 
-                }}
-                onMouseEnter={e => e.target.style.color = '#fff'}
-                onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.45)'}
-              >
+              <Link to={banner.linkTarget} style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.18)', paddingBottom: 2, transition: 'color 200ms ease' }} onMouseEnter={e => e.target.style.color = '#fff'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.45)'}>
                 Xem chi tiết →
               </Link>
             </div>
           </div>
 
           {/* ══ RIGHT — Image ══ */}
-          <div className="pb-image-wrap" style={{
-            flex: '1 1 220px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            position: 'relative', minHeight: 200,            // ↓ 280→200
-          }}>
-            <div className="pb-glow-orb" style={{
-              position: 'absolute', width: '70%', height: '70%',
-              background: 'radial-gradient(ellipse, rgba(219,68,68,0.2) 0%, transparent 70%)',
-              borderRadius: '50%', filter: 'blur(28px)', pointerEvents: 'none',
-            }} />
-            {promoImage ? (
-              <img
-                className="pb-img-float"
-                src={promoImage}
-                alt="Sản phẩm khuyến mãi"
-                style={{
-                  width: '100%', maxWidth: 340,              // ↓ 420→340
-                  height: 'auto', objectFit: 'contain',
-                  filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.55))',
-                  position: 'relative', zIndex: 2,
-                }}
-              />
-            ) : (
-              <div className="pb-img-float" style={{
-                width: 200, height: 240, display: 'flex', flexDirection: 'column',  // ↓ 260/300→200/240
-                alignItems: 'center', justifyContent: 'center', gap: 12, position: 'relative', zIndex: 2,
-              }}>
-                <svg width="100" height="150" viewBox="0 0 120 180" fill="none" opacity="0.2">
-                  <path d="M44 20 C44 14 50 10 60 10 C70 10 76 14 76 20 L78 40 C90 48 96 60 96 75 L96 150 C96 160 88 168 76 168 L44 168 C32 168 24 160 24 150 L24 75 C24 60 30 48 42 40 Z" stroke="white" strokeWidth="2" fill="rgba(255,255,255,0.05)"/>
-                  <path d="M44 40 L76 40" stroke="white" strokeWidth="1.5" opacity="0.5"/>
-                  <ellipse cx="60" cy="75" rx="28" ry="8" stroke="rgba(219,68,68,0.6)" strokeWidth="1" fill="none"/>
-                </svg>
-                <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: 11, margin: 0, letterSpacing: '0.08em', textTransform: 'uppercase', textAlign: 'center' }}>
-                  src/assets/promo-product.png
-                </p>
-              </div>
-            )}
+          <div className="pb-image-wrap" style={{ flex: '1 1 220px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', minHeight: 200 }}>
+            <div className="pb-glow-orb" style={{ position: 'absolute', width: '70%', height: '70%', background: 'radial-gradient(ellipse, rgba(219,68,68,0.2) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(28px)', pointerEvents: 'none' }} />
+            <img className="pb-img-float" src={banner.image} alt="Sản phẩm khuyến mãi" style={{ width: '100%', maxWidth: 340, height: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.55))', position: 'relative', zIndex: 2 }} />
           </div>
-
         </div>
       </div>
     </section>

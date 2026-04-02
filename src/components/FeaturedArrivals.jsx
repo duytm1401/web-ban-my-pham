@@ -1,10 +1,6 @@
 import React from 'react';
 import { Truck, Headphones, ShieldCheck } from 'lucide-react';
 
-import mainImg from '../assets/FeaturedArrivals/featured-main.jpg';
-import topImg from '../assets/FeaturedArrivals/featured-top.jpg';
-import bottomImg from '../assets/FeaturedArrivals/featured-bottom.jpg';
-
 function ComingSoonBadge() {
   return (
     <div style={{
@@ -20,8 +16,17 @@ function ComingSoonBadge() {
   );
 }
 
-export default function FeaturedArrivals() {
+// NHẬN DỮ LIỆU `products` TỪ TRANG CHỦ
+export default function FeaturedArrivals({ products = [] }) {
   const card = { position: 'relative', borderRadius: 12, overflow: 'hidden', background: '#111' };
+
+  // Đảm bảo có đủ 3 sản phẩm để lấp đầy Grid, nếu không thì ẩn
+  if (!products || products.length < 3) return null;
+
+  // Tách dữ liệu ra thành ô lớn, ô trên, ô dưới
+  const mainItem = products[0];
+  const topItem = products[1];
+  const bottomItem = products[2];
 
   return (
     <section style={{ marginTop: 80, marginBottom: 80, fontFamily: '"Cormorant Garamond", Georgia, serif' }}>
@@ -48,34 +53,50 @@ export default function FeaturedArrivals() {
         {/* Left hero — spans 2 rows */}
         <div className="fa-card" style={{ ...card, gridColumn: 1, gridRow: '1 / 3', minHeight: 540, display: 'flex', alignItems: 'flex-end' }}>
           <ComingSoonBadge />
-          <img src={mainImg || 'https://placehold.co/520x700/1a0a0a/888?text=Bo+Suu+Tap'} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.75 }} />
+          <img src={mainItem.image} alt={mainItem.title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.75 }} />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.93) 0%,rgba(0,0,0,.28) 55%,transparent 100%)', zIndex: 10 }} />
           <div style={{ position: 'relative', zIndex: 20, padding: '24px 24px 28px', width: '100%' }}>
-            <p style={{ fontSize: 10, color: 'rgba(219,68,68,.75)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 8, fontFamily: 'sans-serif' }}>Skincare · Collection 2025</p>
-            <h3 style={{ fontSize: 'clamp(1.3rem,2.5vw,1.55rem)', fontWeight: 700, color: '#fff', lineHeight: 1.2, margin: 0 }}>Bộ Sưu Tập Trang Điểm Mùa Xuân</h3>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,.52)', marginTop: 8, lineHeight: 1.65, fontFamily: 'sans-serif' }}>Hương thơm quyến rũ, lưu hương suốt 24h — tỏa sáng mọi góc nhìn.</p>
+            <p style={{ fontSize: 10, color: 'rgba(219,68,68,.75)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 8, fontFamily: 'sans-serif' }}>
+              {mainItem.category}
+            </p>
+            <h3 style={{ fontSize: 'clamp(1.3rem,2.5vw,1.55rem)', fontWeight: 700, color: '#fff', lineHeight: 1.2, margin: 0 }}>
+              {mainItem.title}
+            </h3>
+            {mainItem.desc && (
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,.52)', marginTop: 8, lineHeight: 1.65, fontFamily: 'sans-serif' }}>
+                {mainItem.desc}
+              </p>
+            )}
           </div>
         </div>
 
         {/* Top right */}
         <div className="fa-card" style={{ ...card, gridColumn: 2, gridRow: 1, minHeight: 258, display: 'flex', alignItems: 'flex-end' }}>
           <ComingSoonBadge />
-          <img src={topImg || 'https://placehold.co/520x300/0e0a14/888?text=Serum+B5'} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.72 }} />
+          <img src={topItem.image} alt={topItem.title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.72 }} />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.2) 60%,transparent 100%)', zIndex: 10 }} />
           <div style={{ position: 'relative', zIndex: 20, padding: '16px 20px 22px', width: '100%' }}>
-            <p style={{ fontSize: 9, color: 'rgba(219,68,68,.75)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 5, fontFamily: 'sans-serif' }}>Serum · Phục hồi</p>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff', margin: 0 }}>Serum Phục Hồi Da B5</h3>
+            <p style={{ fontSize: 9, color: 'rgba(219,68,68,.75)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 5, fontFamily: 'sans-serif' }}>
+              {topItem.category}
+            </p>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff', margin: 0 }}>
+              {topItem.title}
+            </h3>
           </div>
         </div>
 
         {/* Bottom right */}
         <div className="fa-card" style={{ ...card, gridColumn: 2, gridRow: 2, minHeight: 258, display: 'flex', alignItems: 'flex-end' }}>
           <ComingSoonBadge />
-          <img src={bottomImg || 'https://placehold.co/520x300/0a0e14/888?text=Son+Kem+Li'} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.72 }} />
+          <img src={bottomItem.image} alt={bottomItem.title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.72 }} />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.2) 60%,transparent 100%)', zIndex: 10 }} />
           <div style={{ position: 'relative', zIndex: 20, padding: '16px 20px 22px', width: '100%' }}>
-            <p style={{ fontSize: 9, color: 'rgba(219,68,68,.75)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 5, fontFamily: 'sans-serif' }}>Môi · Màu sắc mới</p>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff', margin: 0 }}>Son Kem Lì Mới Nhất</h3>
+            <p style={{ fontSize: 9, color: 'rgba(219,68,68,.75)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 5, fontFamily: 'sans-serif' }}>
+              {bottomItem.category}
+            </p>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff', margin: 0 }}>
+              {bottomItem.title}
+            </h3>
           </div>
         </div>
 

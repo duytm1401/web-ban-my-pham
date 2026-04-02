@@ -1,42 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, Minus, Plus, ShoppingBag, LogIn, ArrowLeft } from 'lucide-react';
 
 import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext'; // 1. KÉO ỐNG NƯỚC GIỎ HÀNG VÀO
 
 export default function CartPage() {
   const { isLoggedIn } = useAuth(); 
   const navigate = useNavigate();
 
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Sữa Rửa Mặt La Roche-Posay Purifying Foaming",
-      price: 420000,
-      quantity: 1,
-      image: "/images/anh1.jpg"
-    },
-    {
-      id: 2,
-      name: "Serum phục hồi da Estee Lauder Advanced Night Repair",
-      price: 2500000,
-      quantity: 2,
-      image: "/images/anh2.jpg"
-    }
-  ]);
+  // 2. LẤY DỮ LIỆU THẬT TỪ KHO CHUNG (THAY VÌ DÙNG useState DATA GIẢ)
+  const { cartItems, updateQuantity, removeFromCart } = useCart();
 
+  // 3. ĐIỀU CHỈNH CÁC HÀM NÀY ĐỂ BẮN LỆNH VÀO KHO
   const increaseQty = (id) => {
-    setCartItems(items => items.map(item => item.id === id ? { ...item, quantity: item.quantity + 1 } : item));
+    const item = cartItems.find(i => i.id === id);
+    if (item) updateQuantity(id, item.quantity + 1);
   };
 
   const decreaseQty = (id) => {
-    setCartItems(items => items.map(item => item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item));
+    const item = cartItems.find(i => i.id === id);
+    if (item && item.quantity > 1) updateQuantity(id, item.quantity - 1);
   };
 
   const removeItem = (id) => {
-    setCartItems(items => items.filter(item => item.id !== id));
+    removeFromCart(id);
   };
 
+  // TÍNH TOÁN TIỀN BẠC (Dựa trên hàng thật trong kho)
   const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   const shipping = 0; // Miễn phí giao hàng
   const total = subtotal + shipping;
@@ -44,7 +35,7 @@ export default function CartPage() {
   // LUỒNG 1: CHƯA ĐĂNG NHẬP -> HIỆN THÔNG BÁO
   if (!isLoggedIn) {
     return (
-      <div className="bg-white min-h-[70vh] flex flex-col items-center justify-center font-body px-4">
+      <div className="bg-white min-h-[70vh] flex flex-col items-center justify-center font-body px-4 mt-[72px]">
         <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-6">
           <ShoppingBag size={48} strokeWidth={1} className="text-gray-400" />
         </div>
@@ -74,7 +65,7 @@ export default function CartPage() {
 
   // LUỒNG 2: ĐÃ ĐĂNG NHẬP -> HIỆN GIỎ HÀNG
   return (
-    <div className="bg-white min-h-screen pb-20 font-body overflow-x-hidden max-w-full">
+    <div className="bg-white min-h-screen pb-20 font-body overflow-x-hidden max-w-full mt-[72px]">
       
       {/* BREADCRUMB */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-sm text-gray-500">
@@ -125,7 +116,14 @@ export default function CartPage() {
                   {/* Cột 1: Thông tin sản phẩm */}
                   <div className="col-span-1 md:col-span-5 flex items-center gap-4">
                     <img src={item.image} alt={item.name} className="w-16 h-16 md:w-14 md:h-14 object-cover rounded-sm mix-blend-multiply bg-gray-50" />
-                    <span className="text-sm md:text-base text-gray-900 font-medium line-clamp-2 pr-4">{item.name}</span>
+                    <div className="flex flex-col">
+                      <span className="text-sm md:text-base text-gray-900 font-medium line-clamp-2 pr-4">{item.name}</span>
+                      {/* Hiển thị phân loại màu/size nếu có */}
+                      <span className="text-xs text-gray-500 mt-1">
+                        {item.color && `Màu: ${item.color} `}
+                        {item.size && `| Size: ${item.size}`}
+                      </span>
+                    </div>
                   </div>
 
                   {/* Cột 2: Giá (Responsive) */}

@@ -21,9 +21,9 @@ export default function AboutPage() {
   ];
 
   const team = [
-    { id: 1, name: "Nguyễn Phương Hằng", role: "Người sáng lập & Chủ tịch", image: "/images/ng3.jpg" },
-    { id: 2, name: "Dược Sĩ Tiến", role: "Giám đốc điều hành", image: "/images/ng1.webp" },
-    { id: 3, name: "Đoàn Di Băng", role: "Nhà thiết kế sản phẩm", image: "images/ng2.jpg" },
+    { id: 1, name: "Nguyễn Phương Hằng", role: "Người sáng lập & Chủ tịch", image: "/images/anh-vecty/ng3.jpg" },
+    { id: 2, name: "Dược Sĩ Tiến", role: "Giám đốc điều hành", image: "/images/anh-vecty/ng1.webp" },
+    { id: 3, name: "Đoàn Di Băng", role: "Nhà thiết kế sản phẩm", image: "images/anh-vecty/ng2.jpg" },
   ];
 
   const features = [
@@ -52,7 +52,7 @@ export default function AboutPage() {
           </div>
           <div className="flex-1 w-full">
             <img 
-              src="/images/banner_cty.jpg" 
+              src="/images/anh-vecty/banner_cty.jpg" 
               alt="Our Story" 
               className="w-full h-auto object-cover rounded-md shadow-sm"
             />

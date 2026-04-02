@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Facebook, Instagram, Youtube } from 'lucide-react';
-import qrCodeImg from '../assets/Footer/qr-code.png';
-import bctImg from '../assets/Footer/bo-cong-thuong.png';
 
 /* ── Micro-components ─────────────────────────────────────── */
 function NavLink({ children }) {
@@ -81,7 +79,8 @@ function AccordionCol({ title, children }) {
         onClick={() => setOpen(o => !o)}
         style={{
           width: '100%', background: 'none', border: 'none',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          display: 'flex', alignItems: 'center', 
+          justifyContent: 'space-between', /* ✅ ĐÃ SỬA Ở ĐÂY */
           cursor: 'pointer', padding: '14px 0',
           borderBottom: '1px solid rgba(255,255,255,.06)',
         }}
@@ -275,13 +274,13 @@ export default function Footer() {
               <div>
                 <p style={{ fontSize: 10, color: '#4b5563', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Zalo OA</p>
                 <div style={{ width: 72, height: 72, background: '#fff', borderRadius: 8, padding: 5 }}>
-                  <img src={qrCodeImg || 'https://placehold.co/62x62/f5f5f5/bbb?text=QR'} alt="QR" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 4 }} />
+                  <img src="/images/Footer/qr-code.png" alt="QR" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 4 }} />
                 </div>
               </div>
               <div>
                 <p style={{ fontSize: 10, color: '#4b5563', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Đã xác nhận</p>
                 <img
-                  src={bctImg || 'https://placehold.co/100x36/181820/666?text=Bộ+Công+Thương'}
+                  src="/images/Footer/bo-cong-thuong.png"
                   alt="Bộ Công Thương"
                   style={{ height: 30, opacity: 0.65, cursor: 'pointer', transition: 'opacity .2s' }}
                   onMouseEnter={e => { e.currentTarget.style.opacity = 1; }}
@@ -339,13 +338,13 @@ export default function Footer() {
               <div>
                 <p style={{ fontSize: 10, color: '#4b5563', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Zalo OA</p>
                 <div style={{ width: 64, height: 64, background: '#fff', borderRadius: 8, padding: 4 }}>
-                  <img src={qrCodeImg || 'https://placehold.co/56x56/f5f5f5/bbb?text=QR'} alt="QR" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 4 }} />
+                  <img src="/images/Footer/qr-code.png" alt="QR" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 4 }} />
                 </div>
               </div>
               <div>
                 <p style={{ fontSize: 10, color: '#4b5563', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Đã xác nhận</p>
                 <img
-                  src={bctImg || 'https://placehold.co/100x36/181820/666?text=Bộ+Công+Thương'}
+                  src="/images/Footer/bo-cong-thuong.png"
                   alt="Bộ Công Thương"
                   style={{ height: 28, opacity: 0.65 }}
                 />
