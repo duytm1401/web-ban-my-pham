@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Đang chuyển hướng...</title>
+    <script>
+      // Bắt lấy cái đường dẫn mà người dùng vừa F5 (Ví dụ: /danh-muc)
+      const path = window.location.pathname;
+      // Đá họ về trang chủ (/) kèm theo đường dẫn cũ ở đuôi (/?redirect=/danh-muc)
+      window.location.replace(
+        window.location.origin + '/web-ban-my-pham/?redirect=' + encodeURIComponent(path)
+      );
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
